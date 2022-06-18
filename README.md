@@ -7,6 +7,31 @@ Construct ANSI colors strings from object descriptors.
 ## Usage
 
 ```ts
+import { ansi } from 'ansi-construct'
+
+const item = ansi({ text: 'foo', color: ['red', 'bold'], padStart: 5 })
+
+// change it after creation
+item.padStart = 6
+
+// stringify
+console.log(`${item}`) // '   foo'
+```
+
+```ts
+import { ansi } from 'ansi-construct'
+
+const items = [
+  ansi({ text: 'foo', color: ['red', 'bold'], padStart: 5 }),
+  ansi({ text: 'bar', color: 'underline' }),
+  ansi('baz', 'blue'),
+]
+
+// stringify
+console.log(items.join('')) // '   foo\n\u001b[4mbar\u001b[0mbaz\u001b[0m'
+```
+
+```ts
 import type { AnsiItem } from 'ansi-construct'
 import { construct } from 'ansi-construct'
 
