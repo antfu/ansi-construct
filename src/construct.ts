@@ -47,10 +47,14 @@ export function construct(items: AnsiItem[]): string {
   }).join('')
 }
 
+function hasOwn(object: any, property: string | symbol | number) {
+  return Object.prototype.hasOwnProperty.call(Object(object), property)
+}
+
 function defineToString<T extends {}>(item: T, fn: Function) {
-  if (!Object.hasOwn(item, 'toString'))
+  if (!hasOwn(item, 'toString'))
     Object.defineProperty(item, 'toString', { value: fn, enumerable: false })
-  if (!Object.hasOwn(item, Symbol.toStringTag))
+  if (!hasOwn(item, Symbol.toStringTag))
     Object.defineProperty(item, Symbol.toStringTag, { value: fn, enumerable: false })
 
   return item
