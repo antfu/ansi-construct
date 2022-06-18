@@ -30,7 +30,7 @@ export function normalizeItem(item: AnsiItem, toString = true): AnsiObject {
   }
 
   if (toString)
-    defineToString(result)
+    defineToString(result, () => stringifyItem(result))
 
   return result
 }
@@ -47,13 +47,11 @@ export function construct(items: AnsiItem[]): string {
   }).join('')
 }
 
-function defineToString(item: AnsiObject) {
-  const toString = () => stringifyItem(item)
-
+function defineToString<T extends {}>(item: T, fn: Function) {
   if (!Object.hasOwn(item, 'toString'))
-    Object.defineProperty(item, 'toString', { value: toString, enumerable: false })
+    Object.defineProperty(item, 'toString', { value: fn, enumerable: false })
   if (!Object.hasOwn(item, Symbol.toStringTag))
-    Object.defineProperty(item, Symbol.toStringTag, { value: toString, enumerable: false })
+    Object.defineProperty(item, Symbol.toStringTag, { value: fn, enumerable: false })
 
   return item
 }
