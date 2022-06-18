@@ -1,48 +1,72 @@
 import pc from 'picocolors'
 import { toArray } from '@antfu/utils'
-import type { AnsiItem, AnsiLines, AnsiObjectShorthand, ConstructOptions } from './types'
+import type { AnsiItem, AnsiObject, BuiltinColors } from './types'
 
-export function c(...items: AnsiItem[]): string {
-  return items.map(i => constructItem(i)).join('')
-}
+export function normalizeItem(item: AnsiItem, toString = true): AnsiObject {
+  let result: AnsiObject
 
-export function construct(items: AnsiItem[], options?: ConstructOptions): string {
-  return items.map(i => constructItem(i, options)).join(options?.padding ?? '')
-}
-
-export function constructLines(items: AnsiLines, options?: ConstructOptions): string {
-  return items.map(i => construct(i, options)).join('\n')
-}
-
-function constructItem(item: AnsiItem, options?: ConstructOptions) {
-  if (typeof item === 'string')
-    return item
-  if (!item)
-    return ''
-
-  if (Array.isArray(item)) {
-    item = <AnsiObjectShorthand>{
-      t: item[0],
-      c: item.slice(1),
+  if (typeof item === 'string') {
+    result = { text: item }
+  }
+  else if (!item) {
+    result = { text: '' }
+  }
+  else if (Array.isArray(item)) {
+    result = {
+      text: item[0],
+      color: item.slice(1) as BuiltinColors[],
     }
   }
-  else if ('text' in item) {
-    item = <AnsiObjectShorthand>{
-      t: item.text,
-      c: item.color,
-      ps: item.padStart,
-      pe: item.padEnd,
+  else if ('t' in item) {
+    result = {
+      text: item.t,
+      color: item.c,
+      padStart: item.ps,
+      padEnd: item.pe,
     }
   }
+  else {
+    result = item
+  }
 
-  let text = item.t
-  if (item.ps)
-    text = Array.isArray(item.ps) ? text.padStart(...item.ps) : text.padStart(item.ps)
-  if (item.pe)
-    text = Array.isArray(item.pe) ? text.padEnd(...item.pe) : text.padEnd(item.pe)
+  if (toString)
+    defineToString(result)
 
-  if (item.c && options?.colors !== false) {
-    const colors = toArray(item.c).reverse()
+  return result
+}
+
+export function ansi(text: string, ...colors: BuiltinColors[]): AnsiObject
+export function ansi(item: AnsiItem): AnsiObject
+export function ansi(...args: any): AnsiObject {
+  return normalizeItem(args.length > 1 ? args : args[0])
+}
+
+export function construct(items: AnsiItem[]): string {
+  return items.map((i) => {
+    return stringifyItem(normalizeItem(i, false))
+  }).join('')
+}
+
+function defineToString(item: AnsiObject) {
+  const toString = () => stringifyItem(item)
+
+  if (!Object.hasOwn(item, 'toString'))
+    Object.defineProperty(item, 'toString', { value: toString, enumerable: false })
+  if (!Object.hasOwn(item, Symbol.toStringTag))
+    Object.defineProperty(item, Symbol.toStringTag, { value: toString, enumerable: false })
+
+  return item
+}
+
+function stringifyItem(item: AnsiObject) {
+  let text = item.text
+  if (item.padStart)
+    text = Array.isArray(item.padStart) ? text.padStart(...item.padStart) : text.padStart(item.padStart)
+  if (item.padEnd)
+    text = Array.isArray(item.padEnd) ? text.padEnd(...item.padEnd) : text.padEnd(item.padEnd)
+
+  if (item.color) {
+    const colors = toArray(item.color).reverse()
     colors.forEach((c) => {
       text = pc[c](text)
     })

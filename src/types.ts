@@ -40,22 +40,6 @@ export type AnsiItem = AnsiObject | AnsiObjectShorthand | AnsiArray | string | u
 export type AnsiItems = AnsiItem[]
 export type AnsiLines = AnsiItems[]
 
-export interface ConstructOptions {
-  /**
-   * Enable colors or not.
-   *
-   * @default auto
-   */
-  colors?: boolean
-
-  /**
-   * Padding between each item
-   *
-   * @default ''
-   */
-  padding?: string
-}
-
 export type BuiltinColors =
   | 'reset'
   | 'bold'
