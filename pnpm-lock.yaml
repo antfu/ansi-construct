@@ -8,10 +8,10 @@ importers:
       '@antfu/ni': ^0.16.2
       '@antfu/utils': ^0.5.2
       '@types/node': ^18.0.0
+      ansis: ^3.12.0
       bumpp: ^8.2.1
       eslint: ^8.18.0
       esno: ^0.16.3
-      picocolors: ^1.0.0
       pnpm: ^7.2.1
       rimraf: ^3.0.2
       typescript: ^4.7.4
@@ -19,7 +19,7 @@ importers:
       vite: ^2.9.12
       vitest: ^0.15.1
     dependencies:
-      picocolors: 1.0.0
+      ansis: 3.12.0
     devDependencies:
       '@antfu/eslint-config': 0.25.1_b5e7v2qnwxfo6hmiq56u52mz3e
       '@antfu/ni': 0.16.2
@@ -759,6 +759,11 @@ packages:
     dependencies:
       color-convert: 2.0.1
     dev: true
+
+  /ansis/3.12.0:
+    resolution: {integrity: sha512-SxhlInpMkv9QCyI2yHyrhVrTF8dH93M/S86DT5f9brFgr92uJLOCg0RNmtx3YKWKcRmNAaU+gyUfHMdUiqxvFw==}
+    engines: {node: '>=14'}
+    dev: false
 
   /argparse/2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
@@ -2905,6 +2910,7 @@ packages:
 
   /picocolors/1.0.0:
     resolution: {integrity: sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==}
+    dev: true
 
   /picomatch/2.3.0:
     resolution: {integrity: sha512-lY1Q/PiJGC2zOv/z391WOTD+Z02bCgsFfvxoXXf6h7kv9o+WmsmzYqrAwY63sNgOxE4xEdq0WyUnXfKeBrSvYw==}

@@ -1,4 +1,4 @@
-import pc from 'picocolors'
+import ansis from 'ansis'
 import { toArray } from '@antfu/utils'
 import type { AnsiItem, AnsiObject, BuiltinColors } from './types'
 
@@ -70,7 +70,7 @@ function stringifyItem(item: AnsiObject) {
   if (item.color) {
     const colors = toArray(item.color).reverse()
     colors.forEach((c) => {
-      text = pc[c](text)
+      text = ansis[c](text)
     })
   }
   return text
